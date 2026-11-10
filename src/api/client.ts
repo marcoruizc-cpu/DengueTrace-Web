@@ -2,8 +2,9 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { tokenStorage } from './tokenStorage';
 import type { AuthResponse } from '../types/api';
+import { API_URL } from '../config/env';
 
-export const API_URL = import.meta.env.VITE_API_URL;
+export { API_URL } from '../config/env';
 
 export const api = axios.create({
   baseURL: API_URL,

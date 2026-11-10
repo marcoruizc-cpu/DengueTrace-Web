@@ -1,27 +1,28 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import { FullPageSpinner } from '../components/layout/FullPageSpinner';
 import RouteErrorPage from '../pages/RouteErrorPage';
+import {
+  AdminAlertsPage,
+  AdminDataPage,
+  AdminDistrictsPage,
+  AlertsPage,
+  DashboardPage,
+  DistrictDetailPage,
+  DistrictListPage,
+  LoginPage,
+  MyReportsPage,
+  NewReportPage,
+  NotFoundPage,
+  ProfilePage,
+  RegisterPage,
+  ReportDetailPage,
+  ReportsModerationPage,
+  RiskMapPage,
+} from './lazyPages';
 import { ProtectedRoute, PublicOnlyRoute } from './ProtectedRoute';
 import { RoleRoute } from './RoleRoute';
-
-const LoginPage = lazy(() => import('../pages/auth/LoginPage'));
-const RegisterPage = lazy(() => import('../pages/auth/RegisterPage'));
-const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage'));
-const RiskMapPage = lazy(() => import('../pages/map/RiskMapPage'));
-const DistrictListPage = lazy(() => import('../pages/districts/DistrictListPage'));
-const DistrictDetailPage = lazy(() => import('../pages/districts/DistrictDetailPage'));
-const NewReportPage = lazy(() => import('../pages/reports/NewReportPage'));
-const MyReportsPage = lazy(() => import('../pages/reports/MyReportsPage'));
-const ReportDetailPage = lazy(() => import('../pages/reports/ReportDetailPage'));
-const ReportsModerationPage = lazy(() => import('../pages/reports/ReportsModerationPage'));
-const AlertsPage = lazy(() => import('../pages/alerts/AlertsPage'));
-const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'));
-const AdminDistrictsPage = lazy(() => import('../pages/admin/AdminDistrictsPage'));
-const AdminAlertsPage = lazy(() => import('../pages/admin/AdminAlertsPage'));
-const AdminDataPage = lazy(() => import('../pages/admin/AdminDataPage'));
-const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 
 export const router = createBrowserRouter([
   {
