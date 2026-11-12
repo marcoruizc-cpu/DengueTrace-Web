@@ -13,6 +13,13 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: apiProxyTarget,
           changeOrigin: true,
+          // El navegador manda Origin: http://127.0.0.1:5173 y el CORS del backend lo rechaza con 403.
+          // Como el proxy ya hace que la petición sea "del mismo origen", se quita ese encabezado.
+          configure: proxy => {
+            proxy.on('proxyReq', proxyReq => {
+              proxyReq.removeHeader('origin');
+            });
+          },
         },
       },
     },
