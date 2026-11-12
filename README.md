@@ -1,75 +1,63 @@
-# React + TypeScript + Vite
+# DengueTrace — Frontend Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma de vigilancia y predicción del dengue en Perú. Esta es la aplicación web (React + TypeScript) que consume la API REST de [DengueTrace-Backend](https://github.com/elireyes-web/DengueTrace-Backend).
 
-Currently, two official plugins are available:
+- **Producción:** https://dengue-trace-web.vercel.app
+- **App móvil:** [DengueTrace-Mobile](https://github.com/marcoruizc-cpu/DengueTrace-Mobile)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+React 19 · TypeScript · Vite · Tailwind CSS · React Router · Axios · React Hook Form + Zod · react-hot-toast · lucide-react
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Funcionalidades
 
-## Expanding the ESLint configuration
+- Registro, inicio de sesión y perfil (canal de alertas PUSH/SMS, distrito, radio de alerta).
+- Sesión con JWT: access token en memoria, refresh token en `sessionStorage`, renovación automática (single-flight) y cierre de sesión forzado si el refresh falla.
+- Cliente Axios centralizado con interceptores, `AbortController` en todas las consultas y reintentos con backoff solo en GET.
+- Rutas protegidas por sesión y por rol (USER, MODERATOR, ADMIN), carga diferida con `React.lazy`, página 404 y breadcrumbs.
+- Panel de administración: distritos (CRUD), alertas, casos históricos, datos climáticos y generación del modelo predictivo.
+- Listados paginados consumiendo endpoints paginados del backend.
+- Manejo de errores con mensajes en español por código HTTP, `ErrorBoundary` y validación en tiempo real.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Cómo correrlo
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Requisitos: Node 20 o superior.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+cp .env.example .env   # en Windows: copy .env.example .env
+npm run dev            # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Otros comandos: `npm run build` (compila a `dist/`) y `npm run lint`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Variables de entorno
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Variable | Descripción |
+| --- | --- |
+| `VITE_API_URL` | Ruta base de la API. Con `/api/v1` (o vacía) se usa el proxy de Vite en desarrollo y la regla de `vercel.json` en producción. |
+| `VITE_API_PROXY_TARGET` | Backend al que reenvía el proxy de Vite en desarrollo (por ejemplo `http://localhost:8080`). |
+| `VITE_GOOGLE_MAPS_API_KEY` | Key de Google Maps para el navegador (restringida por dominio). |
+| `VITE_GOOGLE_MAPS_MAP_ID` | Map ID de Google Maps. |
 
+Los valores reales van en `.env`, que no se sube al repositorio.
+
+## Estructura
+
+```text
+src/
+  api/          cliente Axios, tokens y traductor de errores
+  services/     una capa por recurso del backend (GET/POST/PUT/PATCH/DELETE)
+  contexts/     estado global de la sesión (useReducer)
+  hooks/        useAuth, useFetch, paginación, debounce
+  components/   ui/ (kit reutilizable), layout/, admin/
+  pages/        vistas por módulo
+  routes/       router, rutas protegidas y por rol
+  config/       lectura de variables de entorno
+  types/        tipos que reflejan los DTOs del backend
+  utils/        constantes, geolocalización, teléfono
 ```
+
+## Despliegue
+
+Vercel, desde la rama `main`. `vercel.json` reenvía `/api/*` al backend y el resto de rutas a `index.html` (SPA).
