@@ -36,7 +36,7 @@ npm run dev
 
 Abre http://localhost:5173 e inicia sesión con una cuenta del backend. El proxy local apunta por defecto a Spring Boot en `http://localhost:8080`. Si usas otro servidor de pruebas, ajusta `VITE_API_PROXY_TARGET` en `.env` y reinicia Vite.
 
-Para revisar las pantallas con datos, el backend debe tener distritos registrados. El mapa usa sus coordenadas y requiere internet para cargar el fondo. El detalle muestra los casos y la última proyección que devuelve la API. Al enviar un autorreporte, se guarda en el backend configurado y aparece en **Mis reportes**.
+El mapa y el listado muestran los distritos registrados en el servidor. Si la API devuelve una lista vacía, muestran el [catálogo de referencia](src/data/LICENCIA-distritos.txt) con las coordenadas de las capitales distritales. El mapa requiere internet para cargar el fondo. Las alertas, los gráficos y los autorreportes usan los distritos registrados en el servidor. Los reportes enviados aparecen en **Mis reportes**.
 
 Otros comandos: `npm run build` (compila a `dist/`) y `npm run lint`.
 

@@ -106,7 +106,7 @@ export default function NewReportPage() {
         ) : loading ? (
           <p role="status">Cargando distritos...</p>
         ) : districts && districts.length === 0 ? (
-          <p role="status" className="rounded-lg border border-amber-300 p-3">Todavía no hay distritos registrados. Pide a un administrador que agregue uno.</p>
+          <p role="status" className="rounded-lg border border-amber-300 p-3">Todavía no puedes enviar un reporte. El servidor aún no tiene distritos registrados.</p>
         ) : (
           <AdminDistrictSelect districts={districts ?? []} value={districtId} onChange={setDistrictId}
             label="Distrito" required disabled={submitting} />

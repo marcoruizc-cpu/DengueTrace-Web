@@ -16,3 +16,5 @@ export const AdminDistrictsPage = lazy(() => import('../pages/admin/AdminDistric
 export const AdminAlertsPage = lazy(() => import('../pages/admin/AdminAlertsPage'));
 export const AdminDataPage = lazy(() => import('../pages/admin/AdminDataPage'));
 export const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
+
+export const ReferenceDistrictPage = lazy(() => import('../pages/districts/ReferenceDistrictPage'));

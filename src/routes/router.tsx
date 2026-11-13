@@ -16,6 +16,7 @@ import {
   NewReportPage,
   NotFoundPage,
   ProfilePage,
+  ReferenceDistrictPage,
   RegisterPage,
   ReportDetailPage,
   ReportsModerationPage,
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
                 handle: { crumb: 'Distritos' },
                 children: [
                   { index: true, element: <DistrictListPage /> }, // ?search=&department=&page=&size=
+                  { path: 'reference/:ubigeo', element: <ReferenceDistrictPage />, handle: { crumb: 'Referencia' } },
                   { path: ':districtId', element: <DistrictDetailPage />, handle: { crumb: 'Detalle' } }, // ?tab=
                 ],
               },

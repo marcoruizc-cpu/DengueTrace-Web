@@ -42,6 +42,11 @@ export default function DashboardPage() {
         ))}
       </dl>
       <QueryState {...districts} />
+      {!districts.loading && districts.data?.length === 0 && (
+        <p className="text-sm">
+          Todavía no hay distritos monitoreados. <Link className="underline" to="/districts">Consultar catálogo de referencia</Link>
+        </p>
+      )}
       <section className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xl font-semibold">Alertas recientes</h2>
