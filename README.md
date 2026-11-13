@@ -17,17 +17,26 @@ React 19 · TypeScript · Vite · Tailwind CSS · React Router · Axios · React
 - Rutas protegidas por sesión y por rol (USER, MODERATOR, ADMIN), carga diferida con `React.lazy`, página 404 y breadcrumbs.
 - Panel de administración: distritos (CRUD), alertas, casos históricos, datos climáticos y generación del modelo predictivo.
 - Listados paginados consumiendo endpoints paginados del backend.
+- Panel de vigilancia con distritos monitoreados, alertas activas y acceso al distrito del perfil.
+- Mapa con marcadores de distritos y el nivel de su alerta activa más alta. Usa Leaflet y mapas de OpenStreetMap.
+- Detalle de distrito con los últimos 12 registros semanales disponibles, proyección de cuatro semanas y alertas activas.
+- Formulario para reportar síntomas con ubicación opcional e historial de reportes propios.
+- Alertas activas con filtro por distrito.
 - Manejo de errores con mensajes en español por código HTTP, `ErrorBoundary` y validación en tiempo real.
 
 ## Cómo correrlo
 
-Requisitos: Node 20 o superior.
+Requisitos: Node 20.19+ o 22.12+. La prueba local se hizo con Node 24.
 
 ```bash
-npm install
-cp .env.example .env   # en Windows: copy .env.example .env
-npm run dev            # http://localhost:5173
+npm ci
+cp .env.example .env
+npm run dev
 ```
+
+Abre http://localhost:5173 e inicia sesión con una cuenta del backend. El proxy local apunta por defecto a Spring Boot en `http://localhost:8080`. Si usas otro servidor de pruebas, ajusta `VITE_API_PROXY_TARGET` en `.env` y reinicia Vite.
+
+Para revisar las pantallas con datos, el backend debe tener distritos registrados. El mapa usa sus coordenadas y requiere internet para cargar el fondo. El detalle muestra los casos y la última proyección que devuelve la API. Al enviar un autorreporte, se guarda en el backend configurado y aparece en **Mis reportes**.
 
 Otros comandos: `npm run build` (compila a `dist/`) y `npm run lint`.
 

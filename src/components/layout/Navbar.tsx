@@ -18,7 +18,7 @@ export function Navbar() {
   const canModerate = hasRole('ADMIN', 'MODERATOR');
 
   const links = [
-    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/dashboard', label: 'Panel' },
     { to: '/map', label: 'Mapa' },
     { to: '/districts', label: 'Distritos' },
     { to: canModerate ? '/reports' : '/reports/me', label: 'Reportes' },

@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
             handle: { crumb: 'Inicio' },
             children: [
               { index: true, element: <Navigate to="/dashboard" replace /> },
-              { path: 'dashboard', element: <DashboardPage />, handle: { crumb: 'Dashboard' } },
+              { path: 'dashboard', element: <DashboardPage />, handle: { crumb: 'Panel' } },
               { path: 'map', element: <RiskMapPage />, handle: { crumb: 'Mapa de riesgo' } },
               {
                 path: 'districts',
