@@ -39,7 +39,7 @@ export interface RegisterRequest {
 export interface UserUpdateRequest {
   fullName?: string;
   phone?: string;
-  districtId?: number;
+  districtId?: number | null;
   preferredChannel?: NotificationChannel;
   alertRadiusKm?: number;
   fcmToken?: string;

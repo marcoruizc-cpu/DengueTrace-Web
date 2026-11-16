@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BellOff, BellRing, LogOut } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -40,6 +40,7 @@ export default function ProfilePage() {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<ProfileForm>({
     resolver: zodResolver(schema),
@@ -53,6 +54,17 @@ export default function ProfilePage() {
     },
   });
 
+  useEffect(() => {
+    if (!user) return;
+    reset({
+      fullName: user.fullName,
+      phone: toLocalPhone(user.phone),
+      districtId: user.districtId ? String(user.districtId) : '',
+      preferredChannel: user.preferredChannel ?? 'PUSH',
+      alertRadiusKm: String(user.alertRadiusKm ?? 5),
+    });
+  }, [user, reset]);
+
   if (!user) return null; // ProtectedRoute ya garantiza sesión; esto solo satisface a TypeScript
 
   const onSubmit = async (values: ProfileForm) => {
@@ -60,17 +72,34 @@ export default function ProfilePage() {
       const updated = await userService.updateMe({
         fullName: values.fullName,
         phone: toE164(values.phone),
-        districtId: values.districtId ? Number(values.districtId) : undefined,
+        districtId: values.districtId ? Number(values.districtId) : null,
         preferredChannel: values.preferredChannel,
         alertRadiusKm: Number(values.alertRadiusKm),
       });
       setUser(updated);
-      reset(values); // el formulario vuelve a quedar "sin cambios"
+      reset({
+        fullName: updated.fullName,
+        phone: toLocalPhone(updated.phone),
+        districtId: updated.districtId ? String(updated.districtId) : '',
+        preferredChannel: updated.preferredChannel ?? 'PUSH',
+        alertRadiusKm: String(updated.alertRadiusKm ?? 5),
+      }); // el formulario vuelve a quedar "sin cambios"
       toast.success('Perfil actualizado');
     } catch (err) {
       toast.error(toAppError(err).message);
     }
   };
+  
+  const clearDistrict = async () => {
+    try {
+      await userService.clearResidence();
+      setUser({ ...user, districtId: null, districtName: null });
+      toast.success('Residencia eliminada');
+    } catch (err) {
+      toast.error(toAppError(err).message);
+    }
+  };
+
 
   return (
     <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-[1fr_2fr]">
@@ -116,14 +145,29 @@ export default function ProfilePage() {
             error={errors.phone?.message}
             {...register('phone')}
           />
-          <Select label="Distrito donde vives" disabled={districts.loading} {...register('districtId')}>
-            <option value="">{districts.loading ? 'Cargando distritos…' : 'Sin elegir'}</option>
-            {districts.data?.map(d => (
-              <option key={d.id} value={d.id}>
-                {d.name} ({d.department})
-              </option>
-            ))}
-          </Select>
+          <div className="flex items-end gap-2">
+            <div className="flex-1">
+              <Select label="Distrito donde vives" disabled={districts.loading} {...register('districtId')}>
+                <option value="">{districts.loading ? 'Cargando distritos…' : 'Sin elegir'}</option>
+                {user.districtId && !districts.data?.some(d => d.id === user.districtId) && (
+                  <option value={String(user.districtId)}>{user.districtName ?? 'Distrito actual'}</option>
+                )}
+                {districts.data?.map(d => (
+                  <option key={d.id} value={d.id}>{d.name} ({d.department})</option>
+                ))}
+              </Select>
+            </div>
+            {user.districtId != null && (
+              <Button 
+                type="button" 
+                variant="secondary" 
+                onClick={clearDistrict}
+                className="mb-1"
+              >
+                Quitar
+              </Button>
+            )}
+          </div>
 
           <fieldset>
             <legend className="text-sm font-medium text-slate-700 dark:text-slate-200">¿Cómo quieres recibir las alertas?</legend>
