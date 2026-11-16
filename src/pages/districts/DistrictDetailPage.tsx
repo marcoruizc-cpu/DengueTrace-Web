@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { AlertList } from '../../components/surveillance/AlertList';
 import { CaseChart } from '../../components/surveillance/CaseChart';
+import { DistrictWeather } from '../../components/surveillance/DistrictWeather';
 import { QueryState } from '../../components/surveillance/QueryState';
 import { useFetch } from '../../hooks/useFetch';
 import { alertService } from '../../services/alertService';
@@ -74,6 +75,7 @@ function DistrictDetail({ id }: { id: number }) {
         <Link className="inline-block text-sm underline" to={`/reports/new?district=${id}`}>Reportar síntomas en este distrito</Link>
       </header>
       <DistrictData id={id} />
+      <DistrictWeather latitude={district.latitude} longitude={district.longitude} />
     </section>
   );
 }
