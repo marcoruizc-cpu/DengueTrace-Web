@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import { DistrictWeather } from '../../components/surveillance/DistrictWeather';
 import { QueryState } from '../../components/surveillance/QueryState';
 import { loadReferenceDistricts } from '../../data/districtCatalog';
 import { useFetch } from '../../hooks/useFetch';
@@ -27,6 +28,7 @@ export default function ReferenceDistrictPage() {
         <div><dt>Latitud de la capital distrital</dt><dd className="font-semibold">{district.latitude.toFixed(5)}</dd></div>
         <div><dt>Longitud de la capital distrital</dt><dd className="font-semibold">{district.longitude.toFixed(5)}</dd></div>
       </dl>
+      <DistrictWeather latitude={district.latitude} longitude={district.longitude} />
       <Link className="underline" to={`/map?ubigeo=${district.ubigeo}`}>Ver en el mapa</Link>
     </section>
   );
