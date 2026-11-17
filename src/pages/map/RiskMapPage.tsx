@@ -73,7 +73,7 @@ export default function RiskMapPage() {
       const position = L.latLng(district.latitude, district.longitude);
       const label = document.createElement('span');
       label.textContent = district.name;
-      const marker = L.circleMarker(position, { radius: 8, color: '#334155', weight: 2, fillOpacity: 1 })
+      const marker = L.circleMarker(position, { radius: located.length > 50 ? 4 : 8, color: '#334155', weight: located.length > 50 ? 1 : 2, fillOpacity: 0.9 })
         .bindTooltip(label)
         .on('click', () => setDistrictId(district.id))
         .addTo(layer);
@@ -91,7 +91,10 @@ export default function RiskMapPage() {
   useEffect(() => {
     for (const [id, marker] of markers.current) {
       const level = riskByDistrict.get(id);
+      const small = located.length > 50;
       marker.setStyle({ fillColor: level ? RISK_META[level].color : neutralColor });
+      marker.setRadius(level ? 9 : small ? 4 : 8);
+      if (level) marker.bringToFront();
     }
   }, [located, riskByDistrict]);
 

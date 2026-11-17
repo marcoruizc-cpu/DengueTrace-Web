@@ -3,6 +3,7 @@ import { LogOut, Menu, UserRound, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { ThemeToggle } from './ThemeToggle';
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   clsx(
@@ -44,6 +45,7 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           <Link to="/profile" className="flex items-center gap-2 text-sm text-slate-700 hover:underline dark:text-slate-200">
             <UserRound className="h-4 w-4" aria-hidden />
             {user?.fullName}
@@ -58,9 +60,11 @@ export function Navbar() {
           </button>
         </div>
 
+        <div className="flex items-center gap-1 md:hidden">
+        <ThemeToggle />
         <button
           type="button"
-          className="rounded-lg p-2 md:hidden"
+          className="rounded-lg p-2 dark:text-slate-200"
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -68,6 +72,7 @@ export function Navbar() {
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
+        </div>
       </div>
 
       {open && (
